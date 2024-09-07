@@ -3,6 +3,7 @@ import torch
 import numpy as np
 from transparent_background import Remover
 from tqdm import tqdm
+import os
 
 
 # Tensor to PIL
@@ -31,10 +32,13 @@ class InspyrenetRembg:
     CATEGORY = "image"
 
     def remove_background(self, image, torchscript_jit):
-        if (torchscript_jit == "default"):
-            remover = Remover()
+        if os.path.exists("/stable-diffusion-cache/models/transparent-background"):
+            remover = Remover(mode="base", jit=False, ckpt="/stable-diffusion-cache/models/transparent-background/ckpt_base.pth")
         else:
-            remover = Remover(jit=True)
+            if (torchscript_jit == "default"):
+                remover = Remover()
+            else:
+                remover = Remover(jit=True)
         img_list = []
         for img in tqdm(image, "Inspyrenet Rembg"):
             mid = remover.process(tensor2pil(img), type='rgba')
@@ -63,10 +67,13 @@ class InspyrenetRembgAdvanced:
     CATEGORY = "image"
 
     def remove_background(self, image, torchscript_jit, threshold):
-        if (torchscript_jit == "default"):
-            remover = Remover()
+        if os.path.exists("/stable-diffusion-cache/models/transparent-background"):
+            remover = Remover(mode="base", jit=False, ckpt="/stable-diffusion-cache/models/transparent-background/ckpt_base.pth")
         else:
-            remover = Remover(jit=True)
+            if (torchscript_jit == "default"):
+                remover = Remover()
+            else:
+                remover = Remover(jit=True)
         img_list = []
         for img in tqdm(image, "Inspyrenet Rembg"):
             mid = remover.process(tensor2pil(img), type='rgba', threshold=threshold)
