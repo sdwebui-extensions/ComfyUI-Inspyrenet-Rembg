@@ -1,7 +1,6 @@
 from PIL import Image
 import torch
 import numpy as np
-from transparent_background import Remover
 from tqdm import tqdm
 import os
 
@@ -32,6 +31,7 @@ class InspyrenetRembg:
     CATEGORY = "image"
 
     def remove_background(self, image, torchscript_jit):
+        from transparent_background import Remover
         if os.path.exists("/stable-diffusion-cache/models/transparent-background"):
             remover = Remover(mode="base", jit=False, ckpt="/stable-diffusion-cache/models/transparent-background/ckpt_base.pth")
         else:
@@ -67,6 +67,7 @@ class InspyrenetRembgAdvanced:
     CATEGORY = "image"
 
     def remove_background(self, image, torchscript_jit, threshold):
+        from transparent_background import Remover
         if os.path.exists("/stable-diffusion-cache/models/transparent-background"):
             remover = Remover(mode="base", jit=False, ckpt="/stable-diffusion-cache/models/transparent-background/ckpt_base.pth")
         else:
